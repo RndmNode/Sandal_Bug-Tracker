@@ -2,3 +2,7 @@
     box-shadow: 0 0 10px rgba(0 0 0 / 100%);
     background-color: rgb(49, 49, 49);
 }
+
+.alert{
+    margin: 20px;
+}

@@ -1,20 +1,26 @@
 {% extends "index.html" %}
 
-{% block main %}
+{% block navlink %}
+<div class="navbar-nav">
+    <a class="nav-link active" aria-current="page" href="{{ url_for('home') }}">Home</a>
+    <a class="nav-link" aria-current="page" href="{{ url_for('login') }}">Login</a>
+    <a class="nav-link" aria-current="page" href="{{ url_for('signup') }}">Sign Up</a>
+</div>
+{% endblock navlink %}
 
-<body class="text-center">
+{% block main %}
+<body class="align-content-center">
     <div class="container">
-        <div class="row">
+        <div class="row text-center m-3">
             <h1>Sandal</h1>
         </div>
         <div class="row">
             <div class="d-grid gap-2 col-3 mx-auto">
-                <a class="btn btn-primary" href="/login" role="button">Login</a>
-                <a class="btn btn-primary" href="/signup" role="button">Sign up</a>
+                <a class="btn btn-primary" href="{{ url_for('login') }}" role="button">Login</a>
+                <a class="btn btn-primary" href="{{ url_for('signup') }}" role="button">Sign up</a>
             </div>
           </div>
         </div>
       </div>
 </body>
-
 {% endblock main %}
