@@ -11,16 +11,15 @@
 {% block main %}
 <body class="align-content-center">
     <div class="container">
-        <div class="row text-center m-3">
-            <h1>Sandal</h1>
+        <div class="row text-center text-danger">
+            <h1>This is the home page. Do something with it.</h1>
         </div>
-        <div class="row">
-            <div class="d-grid gap-2 col-3 mx-auto">
-                <a class="btn btn-primary" href="{{ url_for('login') }}" role="button">Login</a>
-                <a class="btn btn-primary" href="{{ url_for('signup') }}" role="button">Sign up</a>
-            </div>
-          </div>
+        <div class="row text-center text-warning">
+            <h1>Your next project management solution!</h1>
         </div>
-      </div>
+        <div class="row text-center text-success">
+            <h1>Get Shit Done.</h1>
+        </div>
+    </div>
 </body>
 {% endblock main %}
