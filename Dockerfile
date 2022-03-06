@@ -2,7 +2,7 @@
 
 FROM python:3.9-slim-bullseye
 
-WORKDIR /Users/tzeller/Sandbox/Sandal/flask_sandal
+WORKDIR /Users/tzeller/Sandbox/Sandal
 
 COPY requirements.txt requirements.txt
 RUN pip3 install -r requirements.txt
