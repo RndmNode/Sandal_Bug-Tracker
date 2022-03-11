@@ -3,7 +3,7 @@
 {% block navlink %}
 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <div class="navbar-nav">
-        <a class="nav-link active" href="{{ url_for('home') }}">Home</a>
+        <a class="nav-link" href="{{ url_for('home') }}">Home</a>
     </div>
 </div>
 <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
@@ -12,7 +12,7 @@
           <a class="nav-link me-auto" href="{{ url_for('account') }}">Account</a>
           <a class="nav-link me-4" href="{{ url_for('logout') }}">Logout</a>
         {% else %}
-          <a class="nav-link me-auto" href="{{ url_for('login') }}">Login</a>
+          <a class="nav-link me-auto active" href="{{ url_for('login') }}">Login</a>
           <a class="nav-link me-4" href="{{ url_for('signup') }}">Signup</a>
         {% endif %}
     </div>
