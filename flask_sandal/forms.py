@@ -1,9 +1,8 @@
-from xml.dom import ValidationErr
 from flask_wtf import FlaskForm
 from flask_login import current_user
 from wtforms import StringField, PasswordField, SubmitField, BooleanField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
-from flask_sandal.models import User
+from flask_sandal.models import User, Project
 
 class RegistrationForm(FlaskForm):
     username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
@@ -44,3 +43,14 @@ class UpdateAccountForm(FlaskForm):
             user = User.query.filter_by(email=email.data).first()
             if user:
                 raise ValidationError('That email is already in use. Please use a different one or login with that one.')
+    
+class NewProjectForm(FlaskForm):
+    name = StringField('Project Name', validators=[DataRequired(), Length(min=2, max=20)])
+    create = SubmitField('Create Project')
+
+    def validate_name(self, name):
+        print('Searching for projects with the same name')
+        project = Project.query.filter_by(name=name.data).first()
+        if project:
+            print('PROJECT EXISTS')
+            raise ValidationError('That project name is already in use. Please change it and try again.')

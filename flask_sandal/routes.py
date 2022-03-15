@@ -1,7 +1,8 @@
+from select import select
 from flask import render_template, url_for, flash, redirect, request
 from flask_sandal import app, db, crypt
-from flask_sandal.models import User, Project, Issue
-from flask_sandal.forms import RegistrationForm, LoginForm, UpdateAccountForm
+from flask_sandal.models import User, Project, Issue, Update, user_project
+from flask_sandal.forms import RegistrationForm, LoginForm, UpdateAccountForm, NewProjectForm
 from flask_login import login_user, current_user, logout_user, login_required 
 
 @app.route('/')
@@ -47,6 +48,9 @@ def logout():
 @login_required
 def account():
     form = UpdateAccountForm()
+    projects_query = db.session.query(user_project).filter(user_project.c.user==current_user.username)
+    projects = [i.project for i in db.session.execute(projects_query).all()]
+    print(projects)
     if form.validate_on_submit():
         current_user.username = form.username.data
         current_user.email = form.email.data
@@ -56,4 +60,18 @@ def account():
     elif request.method == 'GET':
         form.username.data = current_user.username
         form.email.data = current_user.email
-    return render_template('account.html', title='Account', form=form)
+    return render_template('account.html', title='Account', form=form, projects=projects)
+
+@app.route('/projects/create', methods=['GET', 'POST'])
+@login_required
+def create_project():
+    form = NewProjectForm()
+    if form.validate_on_submit():
+        project = Project(name=form.name.data, admin=current_user.username)
+        user = User.query.filter_by(username=current_user.username).first()
+        user.projects.append(project)
+        db.session.add(project)
+        db.session.commit()
+        flash(f'Project has been created.', 'success')
+        return redirect(url_for('account'))
+    return render_template('create_project.html', title='New Project', form=form)

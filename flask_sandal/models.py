@@ -1,5 +1,6 @@
 from datetime import datetime
 from email.policy import default
+from enum import unique
 from flask_sandal import db, login_manager
 from flask_login import UserMixin
 
@@ -8,8 +9,8 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 user_project = db.Table('user_project',
-    db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
-    db.Column('project_id', db.Integer, db.ForeignKey('project.id'))
+    db.Column('user', db.Integer, db.ForeignKey('user.username')),
+    db.Column('project', db.Integer, db.ForeignKey('project.name'))
 )
 
 class User(db.Model, UserMixin):
@@ -28,13 +29,14 @@ class User(db.Model, UserMixin):
 class Project(db.Model):
     # columns
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(60), nullable=False)
+    name = db.Column(db.String(60), nullable=False, unique=True)
 
     # relationships
     issues = db.relationship('Issue', backref='project', lazy=True)
+    admin = db.Column(db.Integer, db.ForeignKey('user.username'), nullable=False)
 
     def __repr__(self):
-        return f"Project('{self.name}, {self.id}')"
+        return f"Project('{self.name}')"
 
 class Issue(db.Model):
     # columns

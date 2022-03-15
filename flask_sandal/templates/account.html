@@ -4,6 +4,9 @@
 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <div class="navbar-nav">
         <a class="nav-link" href="{{ url_for('home') }}">Home</a>
+        {% if current_user.is_authenticated %}
+            <a class="nav-link" href="{{ url_for('create_project') }}">New Project</a>
+        {% endif %}
     </div>
 </div>
 <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
@@ -70,10 +73,12 @@
             <div class="col-4">
                 <div class="card text-dark bg-light mb-3">
                     <div class="card-body">
-                        <h5 class="card-title">Projects</h5>
-                        <p class="card-text">Project 1</p>
-                        <p class="card-text">Project 2</p>
-                        <p class="card-text">Project 3</p>
+                        <div class="card-title">Your Projects</div>
+                        <ul class="list-group list-group-flush">
+                            {% for project in projects %}
+                                <li class="list-group-item bg-light">{{ project }}</li>
+                            {% endfor %}
+                        </ul>
                     </div>
                 </div>
             </div>
