@@ -3,7 +3,7 @@
 {% block navlink %}
 <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
     <div class="navbar-nav">
-        <a class="nav-link active" href="{{ url_for('home') }}">Home</a>
+        <a class="nav-link" href="{{ url_for('home') }}">Home</a>
         {% if current_user.is_authenticated %}
             <a class="nav-link" href="{{ url_for('projects') }}">Projects</a>
             <a class="nav-link" href="{{ url_for('create_project') }}">New Project</a>
@@ -25,15 +25,11 @@
 
 {% block main %}
 <body class="align-content-center">
-    <div class="container">
-        <div class="row text-center text-danger">
-            <h1>This is the home page. Do something with it.</h1>
-        </div>
-        <div class="row text-center text-warning">
-            <h1>Your next project management solution!</h1>
-        </div>
-        <div class="row text-center text-success">
-            <h1>Get Shit Done.</h1>
+    <div class="container col-8 m-5">
+        <div class="card text-dark bg-light mb-3">
+            <div class="card-body">
+                <div class="card-title">{{ project.name }}</div>
+            </div>
         </div>
     </div>
 </body>

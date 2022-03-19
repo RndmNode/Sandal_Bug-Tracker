@@ -49,8 +49,8 @@ def logout():
 def account():
     form = UpdateAccountForm()
     projects_query = db.session.query(user_project).filter(user_project.c.user==current_user.username)
-    projects = [i.project for i in db.session.execute(projects_query).all()]
-    print(projects)
+    user_projects = [i.project for i in db.session.execute(projects_query).all()]
+    projects = Project.query.filter(Project.name.in_(user_projects)).all()
     if form.validate_on_submit():
         current_user.username = form.username.data
         current_user.email = form.email.data
@@ -75,3 +75,24 @@ def create_project():
         flash(f'Project has been created.', 'success')
         return redirect(url_for('account'))
     return render_template('create_project.html', title='New Project', form=form)
+
+@app.route('/projects')
+@login_required
+def projects():
+    projects_query = db.session.query(user_project).filter(user_project.c.user==current_user.username)
+    user_projects = [i.project for i in db.session.execute(projects_query).all()]
+    projects = Project.query.filter(Project.name.in_(user_projects)).all()
+    return render_template('projects.html', title='Projects', projects=projects)
+
+@app.route('/projects/<project_id>')
+@login_required
+def project(project_id):
+    project = Project.query.get_or_404(project_id)
+    print(project.team)
+    print(current_user)
+    for mate in project.team:
+        if mate.username == current_user.username:
+            return render_template('project.html', title=project.name, project=project)
+            break
+    flash(f'You need to be added to this project in order to access its page.', 'danger')
+    return redirect(url_for('account'))
