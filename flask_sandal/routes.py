@@ -1,5 +1,5 @@
 from select import select
-from flask import render_template, url_for, flash, redirect, request
+from flask import render_template, url_for, flash, redirect, request, abort
 from flask_sandal import app, db, crypt
 from flask_sandal.models import User, Project, Issue, Update, user_project
 from flask_sandal.forms import RegistrationForm, LoginForm, UpdateAccountForm, NewProjectForm
@@ -88,11 +88,23 @@ def projects():
 @login_required
 def project(project_id):
     project = Project.query.get_or_404(project_id)
-    print(project.team)
-    print(current_user)
-    for mate in project.team:
-        if mate.username == current_user.username:
+    for teammate in project.team:
+        if teammate.username == current_user.username:
             return render_template('project.html', title=project.name, project=project)
-            break
     flash(f'You need to be added to this project in order to access its page.', 'danger')
+    return redirect(url_for('account'))
+
+@app.route('/projects/<project_id>/delete', methods=['POST'])
+@login_required
+def delete_project(project_id):
+    project = Project.query.get_or_404(project_id)
+    if current_user.username != project.admin:
+        abort(403)
+    print("deleting project", project.name)
+    # delete all updates for issues on projects
+    # delete all issues on projects
+    # delete all links to people and projects in user_project
+    db.session.delete(project)
+    db.session.commit()
+    flash(f'Project has been deleted.', 'success')
     return redirect(url_for('account'))
