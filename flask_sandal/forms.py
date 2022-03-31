@@ -14,12 +14,12 @@ class RegistrationForm(FlaskForm):
     def validate_username(self, username):
         user = User.query.filter_by(username=username.data).first()
         if user:
-            raise ValidationError('That username is already in use. Please change it and try again.')
+            raise ValidationError('Username already exists. Change it and try again, or login.')
 
     def validate_email(self, email):
         user = User.query.filter_by(email=email.data).first()
         if user:
-            raise ValidationError('That email is already in use. Please use a different one or login with that one.')
+            raise ValidationError('That email is already in use. Please use a different one or login.')
 
 class LoginForm(FlaskForm):
     email = StringField('Email', validators=[DataRequired(), Email()])
@@ -42,15 +42,23 @@ class UpdateAccountForm(FlaskForm):
         if email.data != current_user.email:
             user = User.query.filter_by(email=email.data).first()
             if user:
-                raise ValidationError('That email is already in use. Please use a different one or login with that one.')
+                raise ValidationError('That email is already in use. Please use a different one.')
     
 class NewProjectForm(FlaskForm):
     name = StringField('Project Name', validators=[DataRequired(), Length(min=2, max=20)])
     create = SubmitField('Create Project')
 
     def validate_name(self, name):
-        print('Searching for projects with the same name')
         project = Project.query.filter_by(name=name.data).first()
         if project:
-            print('PROJECT EXISTS')
             raise ValidationError('That project name is already in use. Please change it and try again.')
+
+class AddToTeamForm(FlaskForm):
+    username = StringField('Username', validators=[DataRequired(), Length(min=2, max=20)])
+    submit = SubmitField('Add Teammate')
+
+    def validate_username(self, username):
+        print('validating username')
+        user = User.query.filter_by(username=username.data).first()
+        if user is None:
+            raise ValidationError('User does not exist.')

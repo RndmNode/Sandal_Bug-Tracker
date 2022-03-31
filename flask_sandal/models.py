@@ -9,8 +9,8 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 user_project = db.Table('user_project',
-    db.Column('user', db.Integer, db.ForeignKey('user.username')),
-    db.Column('project', db.Integer, db.ForeignKey('project.name'))
+    db.Column('user', db.Integer, db.ForeignKey('user.id')),
+    db.Column('project', db.Integer, db.ForeignKey('project.id'))
 )
 
 class User(db.Model, UserMixin):
@@ -33,7 +33,7 @@ class Project(db.Model):
 
     # relationships
     issues = db.relationship('Issue', backref='project', lazy=True)
-    admin = db.Column(db.Integer, db.ForeignKey('user.username'), nullable=False)
+    admin = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
 
     def __repr__(self):
         return f"Project('{self.name}')"

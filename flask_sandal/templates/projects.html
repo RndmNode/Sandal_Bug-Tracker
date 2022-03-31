@@ -29,7 +29,7 @@
         {% for project in projects %}
         <div class="card text-dark bg-light mb-3">
             <div class="card-body">
-                <div class="card-title"><a href="{{url_for('project', project_id=project.id)}}">{{ project.name }}</a></div>
+                <h3><a href="{{url_for('project', project_id=project.id)}}">{{ project.name }}</a></h3>
             </div>
         </div>
         {% endfor %}

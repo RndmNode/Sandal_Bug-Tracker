@@ -28,13 +28,19 @@
     <div class="container col-8 m-5">
         <div class="card text-dark bg-light mb-3">
             <div class="card-body">
-                <div class="card-title">{{ project.name }}</div>
+                <h2>{{ project.name }}</h2>
             </div>
         </div>
     </div>
-    {% if current_user.username == project.admin %}
-    <!-- Button trigger modal -->
-    <button type="button" class="btn btn-outline-danger col-3 m-lg-5" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete Project</button>
+    {% if admin %}
+    <div class="row">
+        <a class="btn btn-warning col-3 m-5" href="{{ url_for('add_teammate', project_id=project.id) }}">Add Teammate</a>
+    </div>
+    <div class="row">
+        <!-- Button trigger modal -->
+        <button type="button" class="btn btn-outline-danger col-3 m-5" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete Project</button>
+    </div>
+    
     {% endif %}
     <!-- Modal -->
     <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
