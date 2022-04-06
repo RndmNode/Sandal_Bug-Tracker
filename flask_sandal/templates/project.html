@@ -32,16 +32,17 @@
             </div>
         </div>
     </div>
-    {% if admin %}
     <div class="row">
-        <a class="btn btn-warning col-3 m-5" href="{{ url_for('add_teammate', project_id=project.id) }}">Add Teammate</a>
-    </div>
-    <div class="row">
+        <a class="btn btn-warning col-2 m-5" href="{{ url_for('report_bug', project_id=project.id) }}">Report Bug</a>
+        {% if admin %}
+        <a class="btn btn-warning col-2 m-5" href="{{ url_for('add_teammate', project_id=project.id) }}">Add Teammate</a>
         <!-- Button trigger modal -->
-        <button type="button" class="btn btn-outline-danger col-3 m-5" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete Project</button>
+        <button type="button" class="btn btn-outline-danger col-2 m-5" data-bs-toggle="modal" data-bs-target="#deleteModal">
+            Delete Project
+        </button>
+        {% endif %}
     </div>
     
-    {% endif %}
     <!-- Modal -->
     <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
         <div class="modal-dialog">

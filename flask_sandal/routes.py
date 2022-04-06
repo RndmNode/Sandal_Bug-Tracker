@@ -2,7 +2,7 @@ from select import select
 from flask import render_template, url_for, flash, redirect, request, abort
 from flask_sandal import app, db, crypt
 from flask_sandal.models import User, Project, Issue, Update, user_project
-from flask_sandal.forms import RegistrationForm, LoginForm, UpdateAccountForm, NewProjectForm, AddToTeamForm
+from flask_sandal.forms import RegistrationForm, LoginForm, UpdateAccountForm, NewProjectForm, AddToTeamForm, ReportBugForm
 from flask_login import login_user, current_user, logout_user, login_required 
 
 @app.route('/')
@@ -107,7 +107,6 @@ def add_teammate(project_id):
         return redirect(url_for('project', project_id=project_id))
     return render_template('addToTeam.html', title='Add Teammate', project=project, form=form)
 
-
 @app.route('/projects/<project_id>/delete', methods=['POST'])
 @login_required
 def delete_project(project_id):
@@ -121,4 +120,15 @@ def delete_project(project_id):
     db.session.delete(project)
     db.session.commit()
     flash(f'Project has been deleted.', 'success')
+    return redirect(url_for('account'))
+
+@app.route('/projects/<project_id>/report-bug', methods=['GET','POST'])
+@login_required
+def report_bug(project_id):
+    form = ReportBugForm()
+    project = Project.query.get_or_404(project_id)
+    if project in current_user.projects:
+        
+        return render_template('report_bug.html', title='Report Bug', project=project, form=form)
+    flash(f'You need to be added to this project in order to access its page.', 'danger')
     return redirect(url_for('account'))
