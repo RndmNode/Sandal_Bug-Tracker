@@ -128,7 +128,16 @@ def report_bug(project_id):
     form = ReportBugForm()
     project = Project.query.get_or_404(project_id)
     if project in current_user.projects:
-        
+        if form.validate_on_submit():
+            title = form.title.data
+            details = form.details.data
+            priority = form.priority.data
+            issue = Issue(description=title, details=details, priority=priority, project_id=project_id)
+            project.issues.append(issue)
+            db.session.add(issue)
+            db.session.commit()
+            flash(f'Issue added successfully.','success')
+            return redirect(url_for('projects'))
         return render_template('report_bug.html', title='Report Bug', project=project, form=form)
     flash(f'You need to be added to this project in order to access its page.', 'danger')
     return redirect(url_for('account'))
