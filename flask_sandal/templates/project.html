@@ -25,10 +25,36 @@
 
 {% block main %}
 <body>
-    <div class="container col-8 m-5">
+    <div class="container col-12 m-5">
         <div class="card text-dark bg-light mb-3">
             <div class="card-body">
                 <h2>{{ project.name }}</h2>
+                {% if project.issues %}
+                <table class="table table-hover">
+                    <thead>
+                      <tr>
+                        <th scope="col">Ticket Number</th>
+                        <th scope="col">Description</th>
+                        <th scope="col">Priority</th>
+                        <th scope="col">State</th>
+                        <th scope="col">Date Reported</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for bug in project.issues %}
+                        <tr>
+                            <th scope="row">{{ bug.ticket_number }}</th>
+                            <td>{{ bug.description }}</td>
+                            <td>{{ bug.priority }}</td>
+                            <td>{{ bug.state }}</td>
+                            <td>{{ bug.date_posted }}</td>
+                        </tr>
+                      {% endfor %}
+                    </tbody>
+                </table>
+                {% else %}
+                <p>No ~features~ (bugs) have been reported at this time!</p>
+                {% endif %}
             </div>
         </div>
     </div>

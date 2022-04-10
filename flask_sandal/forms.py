@@ -66,5 +66,5 @@ class AddToTeamForm(FlaskForm):
 class ReportBugForm(FlaskForm):
     title = StringField('Title', validators=[DataRequired()])
     details = TextAreaField('Description', validators=[DataRequired()])
-    priority = SelectField('Priority', validators=[DataRequired()], choices=[('High', 'High'), ('Medium', 'Medium'), ('Low', 'Low')])
+    priority = SelectField('Priority', validators=[DataRequired()], choices=[('Low', 'Low'), ('Medium', 'Medium'), ('High', 'High')])
     submit = SubmitField('Report Bug')
