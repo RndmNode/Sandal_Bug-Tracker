@@ -29,6 +29,14 @@
         <div class="card text-dark bg-light mb-3">
             <div class="card-body">
                 <h2>{{ issue.description }}</h2>
+                <div class="row">Date Posted: {{ issue.date_posted }}</div>
+                <div class="row">
+                    <div class="col">Priority: {{ issue.priority }}</div>
+                    <div class="col text-sm-end">State: {{ issue.state }}</div>
+                </div>
+                <br>
+                <div class="row">Details</div>
+                <div class="row">{{ issue.details }}</div>
             </div>
         </div>
     </div>
