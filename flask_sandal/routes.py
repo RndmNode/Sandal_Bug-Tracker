@@ -137,7 +137,13 @@ def report_bug(project_id):
             db.session.add(issue)
             db.session.commit()
             flash(f'Issue added successfully.','success')
-            return redirect(url_for('projects'))
+            return redirect(url_for('project', project_id=project.id))
         return render_template('report_bug.html', title='Report Bug', project=project, form=form)
     flash(f'You need to be added to this project in order to access its page.', 'danger')
     return redirect(url_for('account'))
+
+@app.route('/projects/<project_id>/issue/<issue_id>', methods=['GET','POST'])
+@login_required
+def bug(project_id, issue_id):
+    issue = Issue.query.get_or_404(issue_id)
+    return render_template('bug.html', title='Bug', issue=issue)

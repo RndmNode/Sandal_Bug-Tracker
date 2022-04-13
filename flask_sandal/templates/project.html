@@ -42,7 +42,7 @@
                     </thead>
                     <tbody>
                       {% for bug in project.issues %}
-                        <tr>
+                        <tr class="clickable" onclick="window.location='{{ url_for('bug', project_id=project.id, issue_id=bug.ticket_number) }}'">
                             <th scope="row">{{ bug.ticket_number }}</th>
                             <td>{{ bug.description }}</td>
                             <td>{{ bug.priority }}</td>
