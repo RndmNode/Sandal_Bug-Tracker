@@ -25,18 +25,77 @@
 
 {% block main %}
 <body>
-    <div class="container col-12 m-5">
-        <div class="card text-dark bg-light mb-3">
-            <div class="card-body">
-                <h2>{{ issue.description }}</h2>
-                <div class="row">Date Posted: {{ issue.date_posted }}</div>
-                <div class="row">
-                    <div class="col">Priority: {{ issue.priority }}</div>
-                    <div class="col text-sm-end">State: {{ issue.state }}</div>
+    <div class="container m-5">
+        <div class="row">
+            <div class="col-12">
+                <div class="card text-dark bg-light mb-3">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="row mb-4"><h2>{{ issue.description }}</h2></div>
+                            <div class="row"><h4>Details</h4></div>
+                            <div class="row"><p>{{ issue.details }}</p></div>
+                        </div>
+                        <div class="row">
+                            <div class="row"><h4>Updates</h4></div>
+                            {% if updates %}
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">ID</th>
+                                        <th scope="col">Details</th>
+                                        <th scope="col">Date Updated</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for i in updates %}
+                                        <tr>
+                                            <th scope="row">{{ i.id }}</th>
+                                            <td>{{ i.details }}</td>
+                                            <td>{{ i.date_posted }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            {% else %}
+                                <p>No updates have been submitted at this time.</p>
+                            {% endif %}
+                        </div>
+                        <form method="POST" action="" class="col-8">
+                            {{ form.hidden_tag() }}
+                            <fieldset class="form-group m-4">
+                                <legend class="border-bottom mb-4"><h5>Provide an Update</h5></legend>
+                                <div class="form-group">
+                                    <div class="col">
+                                        {{ form.update.label(class="form-control-label") }}
+                                        {% if form.update.errors %}
+                                            {{ form.update(class="form-control form-control-md is-invalid") }}
+                                                <div class="invalid-feedback">
+                                                    {% for error in form.update.errors %}
+                                                        <span>{{ error }}</span>
+                                                    {% endfor %}
+                                                </div>
+                                        {% else %}
+                                            {{ form.update(class="form-control form-control-md") }}
+                                        {% endif %}
+                                    </div>
+                                    <div class="row">
+                                        <div class="col">
+                                            {{ form.state.label(class="form-control-label") }}
+                                            {{ form.state(class="form-control form-control-md") }}
+                                        </div>
+                                        <div class="col">
+                                            {{ form.priority.label(class="form-control-label") }}
+                                            {{ form.priority(class="form-control form-control-md") }}
+                                        </div>
+                                    </div>
+                                </div>
+                            </fieldset>
+                            <div class="form-group text-center">
+                                {{ form.submit(class="btn btn-lg btn-warning col-4") }}
+                            </div>
+                        </form>
+                    </div>
                 </div>
-                <br>
-                <div class="row">Details</div>
-                <div class="row">{{ issue.details }}</div>
             </div>
         </div>
     </div>

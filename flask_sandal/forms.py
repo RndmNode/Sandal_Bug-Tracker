@@ -68,3 +68,9 @@ class ReportBugForm(FlaskForm):
     details = TextAreaField('Description', validators=[DataRequired()])
     priority = SelectField('Priority', validators=[DataRequired()], choices=[('Low', 'Low'), ('Medium', 'Medium'), ('High', 'High')])
     submit = SubmitField('Report Bug')
+
+class UpdateBugForm(FlaskForm):
+    update = TextAreaField('Update Details', validators=[DataRequired()])
+    priority = SelectField('Priority', validators=[DataRequired()], choices=[('Low', 'Low'), ('Medium', 'Medium'), ('High', 'High')])
+    state = SelectField('State', validators=[DataRequired()], choices=[('New','New'), ('Open','Open'), ('Resolved','Resolved')])
+    submit = SubmitField('Update Issue')

@@ -1,8 +1,7 @@
-from select import select
 from flask import render_template, url_for, flash, redirect, request, abort
 from flask_sandal import app, db, crypt
-from flask_sandal.models import User, Project, Issue, Update, user_project
-from flask_sandal.forms import RegistrationForm, LoginForm, UpdateAccountForm, NewProjectForm, AddToTeamForm, ReportBugForm
+from flask_sandal.models import User, Project, Issue, Update
+from flask_sandal.forms import RegistrationForm, LoginForm, UpdateAccountForm, NewProjectForm, AddToTeamForm, ReportBugForm, UpdateBugForm
 from flask_login import login_user, current_user, logout_user, login_required 
 
 @app.route('/')
@@ -136,6 +135,7 @@ def report_bug(project_id):
             project.issues.append(issue)
             db.session.add(issue)
             db.session.commit()
+            
             flash(f'Issue added successfully.','success')
             return redirect(url_for('project', project_id=project.id))
         return render_template('report_bug.html', title='Report Bug', project=project, form=form)
@@ -145,5 +145,23 @@ def report_bug(project_id):
 @app.route('/projects/<project_id>/issue/<issue_id>', methods=['GET','POST'])
 @login_required
 def bug(project_id, issue_id):
+    form = UpdateBugForm()
     issue = Issue.query.get_or_404(issue_id)
-    return render_template('bug.html', title='Bug', issue=issue)
+    project = Project.query.get_or_404(project_id)
+    updates = Update.query.filter_by(issue_id=issue_id).all()
+    if project in current_user.projects:
+        if form.validate_on_submit():
+            details = form.update.data
+            update = Update(details=details, issue_id=issue_id)
+            issue.state = form.state.data
+            issue.priority = form.priority.data
+            db.session.add(update)
+            db.session.commit()
+            flash(f'Update to issue submitted', 'success')
+            return redirect(url_for('project', project_id=project_id))
+        elif request.method == 'GET':
+            form.state.data = issue.state
+            form.priority.data = issue.priority
+        return render_template('bug.html', title='Bug', issue=issue, form=form, updates=updates)
+    flash(f'You need to be added to this project in order to access its page.', 'danger')
+    return redirect(url_for('account'))
